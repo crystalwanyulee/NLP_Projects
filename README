@@ -40,7 +40,7 @@ score = (clf.accuracy(test_pred, test['label']))
 
 If we set `verbose` as `True` in the `.train()` method, it will print accuracy and loss on the training set and validation set for each iteration (see the example output in the following). 
 
-<img align='center' src="../images/image-20200924212735841.png">
+![image-20200925225934569](image-20200924212735841.png)
 
 <p style='LINE-HEIGHT:6px'> </p>
 
