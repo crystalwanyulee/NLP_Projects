@@ -1,1 +1,73 @@
-1
+# Logistic Regression Model for Text Classification from Scratch
+
+
+
+In this project, I build a Logistic Regression model from scratch and train it on 2 different text classification tasks. The one is for a name classification problems, and the other one is to apply the model on Penn Discourse TreeBank data and conduct discourse relation prediction. Moreover, I also implement several trials with different parameters in order to see how parameters influence a model's performance.
+
+
+
+## 1. Code Structure
+
+There are 4 files:
+
+* `corpus.py` is to deal with the representation part by producing linguistic features and constructing matrices for training.
+
+* `maxent.py` includes the learning and inference part in Logistic Regression.  
+* `new_features.py` is used for creating features, such as bigram and trigram, in order to run the fourth experiment conveniently. 
+
+* `experiments.ipynb` is a Jupyter Notebook for demonstrating how to run the code and conducting experiments.
+
+<p style='LINE-HEIGHT:6px'> </p>
+
+## 2. How to run the code?
+
+```python
+# Import class objects
+from corpus import NamesCorpus, PDTBCorpus
+from maxent import MaxEntClassifier
+
+# Create training data
+corpus = PDTBCorpus('data/pdtb', shuffle=True, most_common_n=400, conn_n=100)
+
+# Initialize and train the classifier
+clf = MaxEntClassifier(corpus.labels, corpus.num_features)
+clf.train(corpus.train, corpus.dev, batch_size=500, lambda_value=.1, verbose=True, num_iter=50)
+
+# Make prediction on the test set and evaluate the result
+test_pred = clf.classify(test['instance'])
+score = (clf.accuracy(test_pred, test['label']))
+```
+
+If we set `verbose` as `True` in the `.train()` method, it will print accuracy and loss on the training set and validation set for each iteration (see the example output in the following). 
+
+<img align='center' src="../images/image-20200924212735841.png">
+
+<p style='LINE-HEIGHT:6px'> </p>
+
+## 3. Experimental Setting
+
+The default feature set is 500 features including 400 frequent words for two arguments and 100 frequent words for connective. For the gradient descent,  `learning_rate` is 0.001, and `num_iter` is 50. After each experiment, I select the best parameter and put them in the next experiment. All experiments are run in the Jupyter Notebook. About the specific settings for each experiment, please see the following table.
+
+<p style='LINE-HEIGHT:6px'> </p>
+
+![image-20200925225934569](images/image-20200925225934569.png)
+
+<p style='LINE-HEIGHT:6px'> </p>
+
+#### 4. Experimental Results
+
+![image-20200925225608469](image-20200925225608469.png)
+
+* **Training set size:** The larger size the training set has, the better performance the model gets. The result is from obvious overfitting to slight underfitting. When the training set is larger, the model can get more information and be generalized to unseen data better. 
+* **Minibatch Size: **Figure 2 shows that the model with `the batch size 500` is the best.  When the size is larger, the model performs better. We can observe that the score increases rapidly between 1 to 50, whereas the growth rate becomes slower after 50.  .  
+* **Lambda:** The model with $\lambda=0.1$ is the best. When $\lambda$ is below 1, the accuracy is about 0.8 ~ 0.9, but the score decreases to below 0.7 when $\lambda=10$.
+* **Feature Engineering:** Here I use unigram as the basic set and add one kind of feature every time to see if the performance is improved. `The combination of unigram and word counts`, representing the number of words in each document, has the best accuracy, 0.9077. The first word and the last word features lower the accuracy, suggesting that position information is relatively trivial in this case. Bigram and trigram keep the same accuracy and cannot help push up the performance. 
+
+<p style='LINE-HEIGHT:6px'> </p>
+
+## 5. The Best Result
+
+* **Features Set:** 504 features in total, including unigram (arg1: 200, arg2: 200, connective:100) and word_counts (arg1: 1, arg2: 1)
+
+* **Optimal Parameters:** `lambda_value=0.05`, `batch_size=500`, 
+* **Accuracy:** train: 85.78%, dev: 88.2%, test: 90.87%
