@@ -2,11 +2,11 @@
 
 
 
-In this project, I build a Logistic Regression model from scratch and train it on 2 different text classification tasks. The one is for a name classification problems, and the other one is to apply the model on Penn Discourse TreeBank data and conduct discourse relation prediction. Moreover, I also implement several trials with different parameters in order to see how parameters influence a model's performance.
+In this project, I build a Logistic Regression model from scratch and train it on 2 different text classification tasks. The one is for a name classification problems, and the other one is to apply the model on Penn Discourse TreeBank data and conduct discourse relation prediction. Moreover, I also implement several trials on the second task with different parameters in order to see how parameters influence a model's performance.
 
 
 
-## 1. Code Structure
+## Code Structure
 
 There are 4 files:
 
@@ -56,7 +56,7 @@ The default feature set is 500 features including 400 frequent words for two arg
 
 #### 4. Experimental Results
 
-![image-20200925225608469](image-20200925225608469.png)
+![image-20200925225608469](images/image-20200925225608469.png)
 
 * **Training set size:** The larger size the training set has, the better performance the model gets. The result is from obvious overfitting to slight underfitting. When the training set is larger, the model can get more information and be generalized to unseen data better. 
 * **Minibatch Size: **Figure 2 shows that the model with `the batch size 500` is the best.  When the size is larger, the model performs better. We can observe that the score increases rapidly between 1 to 50, whereas the growth rate becomes slower after 50.  .  
